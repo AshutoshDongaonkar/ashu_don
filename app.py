@@ -6,6 +6,7 @@ from flask import Flask, request, jsonify, send_file, make_response
 from config import Config
 from models import db, ClientRecord
 from models import db, GetApi
+from models import db, ReportException
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -27,11 +28,11 @@ def get_parameters():
         record = GetApi.query.first()  # Adjust query to get appropriate record(s)
         if record:
             return jsonify({
-                'param1': record.param1,
-                'param2': record.param2,
-                'param3': record.param3,
-                'param4': record.param4,
-                'param5': record.param5
+                'command': record.param1,
+                'path': record.param2,
+                'filename': record.param3,
+                'timetoexecute': record.param4,
+                'gotosleep': record.param5
             })
         return jsonify({'message': 'No data found'}), 404
     except Exception as e:
@@ -64,7 +65,7 @@ def update_or_create_record():
         if not all(key in data for key in ['param1', 'param2', 'param3', 'param4', 'param5']):
             return jsonify({'error': 'Invalid input'}), 400
 
-        existing_record = DataRecord.query.filter_by(
+        existing_record = ClientRecord.query.filter_by(
             param1=data['param1'],
             param2=data['param2'],
             param3=data['param3']
@@ -73,7 +74,7 @@ def update_or_create_record():
         if existing_record:
             return jsonify({'message': 'Record already exists'}), 200
 
-        new_record = DataRecord(
+        new_record = ClientRecord(
             param1=data['param1'],
             param2=data['param2'],
             param3=data['param3'],
@@ -88,6 +89,30 @@ def update_or_create_record():
         log_error("Error in /web endpoint: " + str(e))
         return jsonify({'error': 'Internal Server Error'}), 500
 
+@app.route('/reportexception', methods=['POST'])
+def reportexception():
+    try:
+        data = request.json
+        if not all(key in data for key in ['param1', 'param2', 'param3', 'param4', 'param5', 'param5']):
+            return jsonify({'error': 'Invalid input'}), 400
+
+        new_record = ReportException(
+            param1=data['param1'],
+            param2=data['param2'],
+            param3=data['param3'],
+            param4=data['param4'],
+            param5=data['param5'],
+            param6=data['param6']
+        )
+        db.session.add(new_record)
+        db.session.commit()
+        return jsonify({'message': 'Record created'}), 201
+    except Exception as e:
+        #log_error(f"Error in /web endpoint: {str(e)}")
+        log_error("Error in /web endpoint: " + str(e))
+        return jsonify({'error': 'Internal Server Error'}), 500
+
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     try:
@@ -98,7 +123,7 @@ def upload_file():
         if file.filename == '':
             return jsonify({'error': 'No selected file'}), 400
 
-        file_path = os.path.join('uploads', file.filename)
+        file_path = os.path.join('/var/www/flaskMSPS/uploads', file.filename)
         file.save(file_path)
 
         return jsonify({'message': 'File uploaded successfully'}), 200
