@@ -1,11 +1,11 @@
 {
 
-	LOG_FILE_PATH = r'C:\MSPS\MSPS_log.txt'
-	WEB_URL = 'https://robust-ocelot-moderately.ngrok-free.app/api/parameters'  # Replace with your URL
-	DOWN_LOAD_URL = 'https://robust-ocelot-moderately.ngrok-free.app/download'
-	SYSTEM_INFO_URL = 'https://robust-ocelot-moderately.ngrok-free.app/web'  # Replace with your system info URL
-	ERROR_REPORT_URL = 'https://robust-ocelot-moderately.ngrok-free.app/reportexception'  # Replace with your error reporting URL
-	UPLOAD_FILE_URL = 'https://robust-ocelot-moderately.ngrok-free.app/upload'  # Replace with your upload log URL
+	"WEB_URL" : "https://robust-ocelot-moderately.ngrok-free.app/api/parameters"  # Replace with your URL
+	"DOWN_LOAD_URL" : "https://robust-ocelot-moderately.ngrok-free.app/download"
+	"SYSTEM_INFO_UR"L : "https://robust-ocelot-moderately.ngrok-free.app/web"  # Replace with your system info URL
+	"ERROR_REPORT_URL" : "https://robust-ocelot-moderately.ngrok-free.app/reportexception"  # Replace with your error reporting URL
+	"UPLOAD_FILE_URL" : "https://robust-ocelot-moderately.ngrok-free.app/upload"  # Replace with your upload log URL
+        "OPERATION_STATUS_URL" : "https://robust-ocelot-moderately.ngrok-free.app/status"
 
 
 }
